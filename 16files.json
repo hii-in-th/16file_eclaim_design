@@ -113,6 +113,49 @@
                     "AN",
                     "SEQ"
                 ]
+            },
+            "file1ObjectReturn":{
+                "type": "object",
+                "description": "Return body of file1Objedt",
+                "properties": {
+                    "state":{
+                        "$ref": "#/components/schemas/stateObject"
+                    },
+                    "data":{
+                        "$ref": "#/components/schemas/file1Object"
+                    }
+                }
+            },
+            "stateObject":{
+                "type": "object",
+                "description": "เก็บสถานะของข้อมูล",
+                "properties": {
+                    "id":{
+                        "type": "string",
+                        "description": "รหัส id สำหรับอ้างอิงติดตามสถานะข้อมูล",
+                        "example":"dde12ab2cd54"
+                    },
+                    "status":{
+                        "type": "string",
+                        "description": "สถานะการส่งเคลม</br>queuing=เข้าคิวรอประมวลผล</br>waiting=จัดข้อมูลเตรียมข้อมูลพร้อมเข้าสู่การประมวลผล</br>process=เข้าสู่การประมวลผลส่ง eclaim</br>done=เสร็จสิ้นการประมวลผล</br>error=พบปัญหา",
+                        "enum": [
+                            "queuing",
+                            "waiting",
+                            "process",
+                            "done",
+                            "error"
+                        ]
+                        
+                    },
+                    "errorMessage":{
+                        "type": "array",
+                        "items":{
+                            "type": "string"
+                        },
+                        "description": "ข้อความ error จากระบบ",
+                        "example":["ไม่มี HCODE","ไม่มี HN"]
+                    }
+                }
             }
         }
     },
@@ -136,9 +179,46 @@
                 },
                 "responses": {
                     "100": {
-                        "description": "Continue"
+                        "description": "Continue",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/file1ObjectReturn"
+                                }
+                            }
+                        }
                     }
                 }
+            },
+            "get":{
+                "tags": [
+                    "file1"
+                ],
+                "summary": "ดึงสถานะแฟ้มข้อมูลที่ 1",
+                "description": "ดึงสถานะแฟ้มข้อมูลที่ 1 มาตรฐานแฟ้มข้อมูลผู้มีสิทธิการรักษาพยาบาล (INS)",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "required": true,
+                        "schema":{
+                            "type": "string"
+                        },
+                        "example":"dde12ab2cd54"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Continue",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/file1ObjectReturn"
+                                }
+                            }
+                        }
+                    }
+                }                
             }
         }
     }
