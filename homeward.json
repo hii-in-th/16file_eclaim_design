@@ -501,6 +501,34 @@
                     }
                 }
             }
+            
+        },
+        "/eclaim/transaction/{transactionId}": {
+            "get": {
+                "description": "ดึงข้อมูลสถานะ transection",
+                "tags": ["eClaim"],
+                "summary": "ดึงสถานะ transection",
+                "parameters": [
+                    {
+                        "name": "transactionId",
+                        "in": "path",
+                        "description": "transactionId ที่ได้ตอนสร้างข้อมูล",
+                        "example":"507f1f77bcf86cd799439011"
+                    }
+                ],
+                "responses": {
+                    "100": {
+                        "description": "Continue",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/homewardReturn"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
