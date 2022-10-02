@@ -1,8 +1,8 @@
 {
     "openapi": "3.0.2",
     "info": {
-        "title": "API Title",
-        "version": "1.0"
+        "title": "api 16 แฟ้ม eclaim",
+        "version": "0.1a"
     },
     "servers": [
         {
