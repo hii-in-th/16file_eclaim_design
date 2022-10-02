@@ -522,7 +522,11 @@
                         "name": "transactionId",
                         "in": "path",
                         "description": "transactionId ที่ได้ตอนสร้างข้อมูล",
-                        "example": "507f1f77bcf86cd799439011"
+                        "example": "507f1f77bcf86cd799439011",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "responses": {
@@ -550,13 +554,20 @@
                         "name": "personId",
                         "in": "path",
                         "description": "รหัส id ของคน",
-                        "required": true
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
                     },
                     {
                         "name": "page",
                         "in": "query",
                         "description": "รายการของหน้าข้อมูล",
-                        "example": "2"
+                        "example": 2,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
                     }
                 ],
                 "responses": {
@@ -584,13 +595,20 @@
                         "name": "hospitalId",
                         "in": "path",
                         "description": "รหัส id ของ รพ.",
-                        "required": true
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
                     },
                     {
                         "name": "page",
                         "in": "query",
                         "description": "รายการของหน้าข้อมูล",
-                        "example": "2"
+                        "example": 2,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
                     }
                 ],
                 "responses": {
