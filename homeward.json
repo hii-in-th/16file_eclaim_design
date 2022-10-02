@@ -3,7 +3,7 @@
     "info": {
         "title": "eClaim Homeward",
         "version": "1.0",
-        "description": "สำหรับทำรายการเบิกจ่าย eClaim ในระบบ Homeward"
+        "description": "สำหรับทำรายการเบิกจ่าย eClaim ในระบบ Homeward</br> ![ภาพการทำงาน](NHSOeclaim.svg)"
     },
     "servers": [
         {
