@@ -425,6 +425,11 @@
                 "type": "object",
                 "description": "เก็บสถานะของข้อมูล",
                 "properties": {
+                    "type": {
+                        "type": "string",
+                        "description": "รูปแบบ type ของ object ใส่ stateObject",
+                        "example": "stateObject"
+                    },
                     "status": {
                         "type": "string",
                         "description": "สถานะการส่งเคลม</br>queuing=เข้าคิวรอประมวลผล</br>waiting=จัดข้อมูลเตรียมข้อมูลพร้อมเข้าสู่การประมวลผล</br>process=เข้าสู่การประมวลผลส่ง eclaim</br>done=เสร็จสิ้นการประมวลผล</br>error=พบปัญหา",
