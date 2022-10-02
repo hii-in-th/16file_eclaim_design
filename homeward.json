@@ -7,7 +7,7 @@
     },
     "servers": [
         {
-            "url": "https://api.server.test/v1"
+            "url": "https://api-eclaim.hii.in.th/v1"
         }
     ],
     "security": [
