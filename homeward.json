@@ -12,12 +12,12 @@
     ],
     "security": [
         {
-            "api_key":[]
+            "api_key": []
         }
     ],
     "components": {
         "securitySchemes": {
-            "api_key":{
+            "api_key": {
                 "type": "apiKey",
                 "name": "api_key",
                 "in": "header"
@@ -464,6 +464,12 @@
                         ]
                     }
                 }
+            },
+            "homewardReturnS": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/homewardReturn"
+                }
             }
         }
     },
@@ -472,10 +478,12 @@
             "post": {
                 "description": "สร้างรายการข้อมูลการเบิกจ่าย โดยให้ใส่ field ที่มีในระบบ แล้วตัว api จะทำการค้นหาให้เองว่าสามารถประมวลผลส่งออกไฟล์ใดได้บ้าง",
                 "summary": "สร้างรายการข้อมูลการเบิกจ่าย",
-                "tags": ["eClaim"],
+                "tags": [
+                    "eClaim"
+                ],
                 "security": [
                     {
-                        "api_key":[]
+                        "api_key": []
                     }
                 ],
                 "requestBody": {
@@ -501,28 +509,97 @@
                     }
                 }
             }
-            
         },
         "/eclaim/transaction/{transactionId}": {
             "get": {
                 "description": "ดึงข้อมูลสถานะ transection",
-                "tags": ["eClaim"],
+                "tags": [
+                    "eClaim"
+                ],
                 "summary": "ดึงสถานะ transection",
                 "parameters": [
                     {
                         "name": "transactionId",
                         "in": "path",
                         "description": "transactionId ที่ได้ตอนสร้างข้อมูล",
-                        "example":"507f1f77bcf86cd799439011"
+                        "example": "507f1f77bcf86cd799439011"
                     }
                 ],
                 "responses": {
-                    "100": {
-                        "description": "Continue",
+                    "200": {
+                        "description": "Ok",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/homewardReturn"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/eclaim/person/{personId}": {
+            "get": {
+                "description": "อนาคต รายการเบิกจ่ายรายคน",
+                "tags": [
+                    "พัฒนาในอนาคต"
+                ],
+                "parameters": [
+                    {
+                        "name": "personId",
+                        "in": "path",
+                        "description": "รหัส id ของคน",
+                        "required": true
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "รายการของหน้าข้อมูล",
+                        "example": "2"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/homewardReturnS"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/eclaim/hospital/{hospitalId}": {
+            "get": {
+                "description": "อนาคต รายการเบิกจ่ายราย รพ.",
+                "tags": [
+                    "พัฒนาในอนาคต"
+                ],
+                "parameters": [
+                    {
+                        "name": "hospitalId",
+                        "in": "path",
+                        "description": "รหัส id ของ รพ.",
+                        "required": true
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "รายการของหน้าข้อมูล",
+                        "example": "2"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/homewardReturnS"
                                 }
                             }
                         }
