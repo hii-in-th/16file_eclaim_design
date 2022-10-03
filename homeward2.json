@@ -1,0 +1,641 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "eClaim Homeward",
+        "version": "a1",
+        "description": "สำหรับทำรายการเบิกจ่าย eClaim ในระบบ Homeward</br> ![ภาพการทำงาน](NHSOeclaim.svg)"
+    },
+    "servers": [
+        {
+            "url": "https://api-eclaim.hii.in.th/v1"
+        }
+    ],
+    "security": [
+        {
+            "api_key": []
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "api_key": {
+                "type": "apiKey",
+                "name": "api_key",
+                "in": "header"
+            }
+        },
+        "schemas": {
+            "homewardEclaim": {
+                "type": "object",
+                "description": "ข้อมูล Homeward eClaim",
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "description": "รูปแบบ type ของ object ใส่ homewardEclaim",
+                        "example": "homewardEclaim"
+                    },
+                    "hospitalId": {
+                        "type": "string",
+                        "description": "รหัส id รพ. ในระบบ ไว้ใช้สำหรับเรียกคืนดูข้อมูลราย รพ. แนะนำให้ใช้ id เดียวกับระบบ",
+                        "example": "507f1f77bcf86cd799439542"
+                    },
+                    "personId": {
+                        "type": "string",
+                        "description": "รหัส id คน ในระบบ ไว้ใช้สำหรับเรียกคืนดูข้อมูลรายคน แนะนำให้ใช้ id เดียวกับระบบ",
+                        "example": "507f1f77bcf86cd799439237"
+                    },
+                    "AMOUNT": {
+                        "type": "string",
+                        "description": "Number (12,2 BYTE) จำนวนเงิน ค่ารักษาของบริการรายการนั้น เป็นบาท    </br>มีใช้ในแฟ้มที่ 12, 16</br>มีใช้ในแฟ้ม(แบบชื่อ) CHA, DRU",
+                        "example": "110"
+                    },
+                    "AN": {
+                        "type": "string",
+                        "description": "Text (15 BYTE) หมายเลขประจำตัวผู้ป่วยใน ไม่ควรใช้ หมายเลขนี้ซ้ำ   หมายเลขประจำตัวของผู้ป่วยในของแต่ละสถานบริการ</br>มีใช้ในแฟ้มที่ 1, 12, 14, 16</br>มีใช้ในแฟ้ม(แบบชื่อ) INS, CHA, ADP, DRU",
+                        "example": "640002737"
+                    },
+                    "BI": {
+                        "type": "string",
+                        "description": "Number (3 BYTE) ค่า Barthel ADL Index  ใส่ตัวเลขจำนวน 3 หลัก</br>มีใช้ในแฟ้มที่ 14</br>มีใช้ในแฟ้ม(แบบชื่อ) ADP",
+                        "example": "999"
+                    },
+                    "BTEMP": {
+                        "type": "string",
+                        "description": "NUMBER (3,1 BYTE) อุณหภูมิร่างกาย OPBKK</br>มีใช้ในแฟ้มที่ 3</br>มีใช้ในแฟ้ม(แบบชื่อ) OPD",
+                        "example": "37"
+                    },
+                    "CHRGITEM": {
+                        "type": "string",
+                        "description": "Text (2 BYTE) ชนิดของบริการที่คิดค่ารักษา ตามรหัสที่กำหนด ใช้รหัสแบบละเอียด ตามภาคผนวก</br>มีใช้ในแฟ้มที่ 12</br>มีใช้ในแฟ้ม(แบบชื่อ) CHA",
+                        "example": "C1"
+                    },
+                    "CODE": {
+                        "type": "string",
+                        "description": "Text (30 BYTE) รหัสตามที่ สปสช. หรือกองทุนอื่นๆ กำหนด สามารถใส่รหัสตามเงื่อนไข  </br>มีใช้ในแฟ้มที่ 14</br>มีใช้ในแฟ้ม(แบบชื่อ) ADP",
+                        "example": "PCG2G"
+                    },
+                    "DATE": {
+                        "type": "string",
+                        "description": "Date วันที่คิดค่ารักษา วันที่จำหน่าย หรือวันที่ผู้ป่วยเปลี่ยนสิทธิการรักษา บันทึกปีในค่า ค.ศ. กำหนดรูปแบบเป็น “ปีเดือนวัน” (YYYYMMDD) โดยปีเป็น ค.ศ.</br>มีใช้ในแฟ้มที่ 12</br>มีใช้ในแฟ้ม(แบบชื่อ) CHA",
+                        "example": "20210809"
+                    },
+                    "DATEDX": {
+                        "type": "string",
+                        "description": "Date วันเดือนปีที่วินิจฉัยโรค บันทึก ปี ในค่า ค.ศ. กำหนดรูปแบบเป็น “ปีเดือนวัน” (YYYYMMDD) โดยปีเป็น ค.ศ.</br>มีใช้ในแฟ้มที่ 5</br>มีใช้ในแฟ้ม(แบบชื่อ) ODX",
+                        "example": "20210402"
+                    },
+                    "DATEOPD": {
+                        "type": "string",
+                        "description": "Date วันที่ที่รับบริการ บันทึก ปี ในค่าเป็น ค.ศ. กำหนดรูปแบบเป็น “ปีเดือนวัน” (YYYYMMDD) โดยปีเป็น ค.ศ.</br>มีใช้ในแฟ้มที่ 3, 14</br>มีใช้ในแฟ้ม(แบบชื่อ) OPD, ADP",
+                        "example": "20210402"
+                    },
+                    "DBP": {
+                        "type": "string",
+                        "description": "NUMBER (3 BYTE) ความดันโลหิตค่าตัวล่าง OPBKK</br>มีใช้ในแฟ้มที่ 3</br>มีใช้ในแฟ้ม(แบบชื่อ) OPD",
+                        "example": "70"
+                    },
+                    "DETAIL": {
+                        "type": "string",
+                        "description": "Text (255 BYTE) อาการสำคัญ Free-text OPBKK</br>มีใช้ในแฟ้มที่ 3</br>มีใช้ในแฟ้ม(แบบชื่อ) OPD",
+                        "example": "ปวดหลังร้าวลงขาขวา"
+                    },
+                    "DIAG": {
+                        "type": "string",
+                        "description": "Text (7 BYTE) วินิจฉัยโรค ตามรหัส ICD 10  </br>มีใช้ในแฟ้มที่ 5</br>มีใช้ในแฟ้ม(แบบชื่อ) ODX",
+                        "example": "E119"
+                    },
+                    "DOB": {
+                        "type": "string",
+                        "description": "Date บันทึกวันเดือนปีเกิด ปี มีค่าเป็น ค.ศ.   กำหนดรูปแบบเป็น “ปีเดือนวัน” (YYYYMMDD) โดยปีเป็น ค.ศ.</br>มีใช้ในแฟ้มที่ 2</br>มีใช้ในแฟ้ม(แบบชื่อ) PAT",
+                        "example": "19850917"
+                    },
+                    "DRDX": {
+                        "type": "string",
+                        "description": "Text (6 BYTE) แพทย์ผู้วินิจฉัย ตามเลขที่ใบประกอบวิชาชีพ เวชกรรม เลขที่ใบประกอบวิชาชีพแพทย์</br>มีใช้ในแฟ้มที่ 5</br>มีใช้ในแฟ้ม(แบบชื่อ) ODX",
+                        "example": "ว.XXXXX"
+                    },
+                    "DXTYPE": {
+                        "type": "string",
+                        "description": "Text (1 BYTE) ชนิดของโรค ระบุ</br>1 = Primary Diagnosis</br>2 = โรคร่วม (Co morbidity)</br>3 = โรคแทรกซ้อน (Complication)</br>4 = อื่นๆ (Others)</br>5 = สาเหตุภายนอก (External Cause)  </br>มีใช้ในแฟ้มที่ 5</br>มีใช้ในแฟ้ม(แบบชื่อ) ODX",
+                        "example": "1"
+                    },
+                    "FNAME": {
+                        "type": "string",
+                        "description": "Text (40 BYTE) ชื่อ  </br>มีใช้ในแฟ้มที่ 2</br>มีใช้ในแฟ้ม(แบบชื่อ) PAT",
+                        "example": "ชื่อตัวอย่าง"
+                    },
+                    "HCODE": {
+                        "type": "string",
+                        "description": "Text (5 BYTE) รหัสสถานพยาบาล รหัสสถานพยาบาล 5 หลักตามมาตรฐานของกระทรวงสาธารณสุข</br>มีใช้ในแฟ้มที่ 1, 2, 16</br>มีใช้ในแฟ้ม(แบบชื่อ) INS, PAT, DRU",
+                        "example": "11413"
+                    },
+                    "HN": {
+                        "type": "string",
+                        "description": "Text (15 BYTE) หมายเลขประจำตัวผู้รับบริการ หมายเลขประจำตัวของผู้ป่วยนอกของแต่ละสถานบริการ</br>มีใช้ในแฟ้มที่ 1, 2, 3, 5, 12, 14, 16</br>มีใช้ในแฟ้ม(แบบชื่อ) INS, PAT, OPD, ODX, CHA, ADP, DRU",
+                        "example": "0025568"
+                    },
+                    "HOSPMAIN": {
+                        "type": "string",
+                        "description": "Text (5 BYTE) รหัสหน่วยบริการประจำ รหัสสถานพยาบาล 5 หลักตามมาตรฐานของกระทรวงสาธารณสุข</br>มีใช้ในแฟ้มที่ 1</br>มีใช้ในแฟ้ม(แบบชื่อ) INS",
+                        "example": "11413"
+                    },
+                    "HOSPSUB": {
+                        "type": "string",
+                        "description": "Text (5 BYTE) รหัสหน่วยบริการปฐมภูมิ รหัสสถานพยาบาล 5 หลักตามมาตรฐานของกระทรวงสาธารณสุข</br>หน่วยบริการเขต กทม. ต้องมีค่า</br>มีใช้ในแฟ้มที่ 1</br>มีใช้ในแฟ้ม(แบบชื่อ) INS",
+                        "example": "09756"
+                    },
+                    "IDTYPE": {
+                        "type": "string",
+                        "description": "Text (1 BYTE) ประเภทบัตร</br>1 = บัตรประชาชน</br>2 = หนังสือเดินทาง </br>3 = หนังสือต่างด้าว </br>4 = หนังสือ / เอกสารอื่นๆ</br>5 = บัตร ปกส. ต่างด้าว  </br>มีใช้ในแฟ้มที่ 2</br>มีใช้ในแฟ้ม(แบบชื่อ) PAT",
+                        "example": "1"
+                    },
+                    "INSCL": {
+                        "type": "string",
+                        "description": "Text (3 BYTE) สิทธิการรักษาที่ใช้</br>UCS = สิทธิ UC</br>OFC = ข้าราชการ</br>SSS  = ประกันสังคม</br>LGO = อปท</br>NHS = สิทธิเจ้าหน้าที่ สปสช.  ต้องมีค่า เป็นฟิลด์หลักที่ใช้ในการนำเข้าข้อมูลตามสิทธิ</br>มีใช้ในแฟ้มที่ 1</br>มีใช้ในแฟ้ม(แบบชื่อ) INS",
+                        "example": "UCS"
+                    },
+                    "ITEMSRC": {
+                        "type": "string",
+                        "description": "Number (1 BYTE) ประเภทรหัส: </br>1 = รหัสหน่วยบริการ</br>2 =รหัสกรมบัญชีกลาง/รหัสที่สปสช.กำหนด OPBKK กรณีที่ไม่มีฟิลด์นี้</br>มีใช้ในแฟ้มที่ 14</br>มีใช้ในแฟ้ม(แบบชื่อ) ADP",
+                        "example": "2"
+                    },
+                    "LNAME": {
+                        "type": "string",
+                        "description": "Text (40 BYTE) นามสกุล  </br>มีใช้ในแฟ้มที่ 2</br>มีใช้ในแฟ้ม(แบบชื่อ) PAT",
+                        "example": "นามสกุลตัวอย่าง"
+                    },
+                    "MARRIAGE": {
+                        "type": "string",
+                        "description": "Text (1 BYTE) รหัสสถานภาพสมรส </br>1 = โสด</br>2 = สมรส </br>3 = หม้าย</br>4 = หย่า</br>5 = แยกกันอยู่</br>6 = สมณะ</br>9 = ไม่ทราบ  </br>มีใช้ในแฟ้มที่ 2</br>มีใช้ในแฟ้ม(แบบชื่อ) PAT",
+                        "example": "2"
+                    },
+                    "NAMEPAT": {
+                        "type": "string",
+                        "description": "Text (36 BYTE)</br>ชื่อ – สกุล ผู้ป่วย โดยใช้รูปแบบ : ชื่อ (เว้นวรรค) นามสกุล , คำนำหน้าชื่อ  </br>ถ้าไม่กรอกมาระบบจะสร้างให้เองจาก FNAME LNAME , TITLE</br>มีใช้ในแฟ้มที่ 2</br>มีใช้ในแฟ้ม(แบบชื่อ) PAT",
+                        "example": "ชื่อตัวอย่าง นามสกุลตัวอย่าง,นาง"
+                    },
+                    "NATION": {
+                        "type": "string",
+                        "description": "Text (3 BYTE) สัญชาติ    </br>มีใช้ในแฟ้มที่ 2</br>มีใช้ในแฟ้ม(แบบชื่อ) PAT",
+                        "example": "099"
+                    },
+                    "OCCUPA": {
+                        "type": "string",
+                        "description": "Text (3 BYTE) อาชีพ  </br>มีใช้ในแฟ้มที่ 2</br>มีใช้ในแฟ้ม(แบบชื่อ) PAT",
+                        "example": "900"
+                    },
+                    "OPTYPE": {
+                        "type": "string",
+                        "description": "Text (2 BYTE) ประเภทการให้บริการ</br>0 = Refer ในบัญชีเครือข่ายเดียวกัน</br>1 = Refer นอกบัญชีเครือข่าย</br>2 = AE ในบัญชีเครือข่าย </br>3 = AE นอกบัญชีเครือข่าย</br>4 = OP พิการ              </br>5 = OP บัตรตัวเอง</br>6 = Clearing House ศบส</br>7 = OP อื่นๆ (Individual data)</br>8 = ผู้ป่วยกึ่ง OP / IP (NONI) </br>9 = บริการแพทย์แผนไทย OPBKK</br>มีใช้ในแฟ้มที่ 3</br>มีใช้ในแฟ้ม(แบบชื่อ) OPD",
+                        "example": "3"
+                    },
+                    "PERMITNO": {
+                        "type": "string",
+                        "description": "Text (30 BYTE) รหัส Claim Code/เลขอนุมัติ/</br>เลข Approve code UCS = เลข Authen</br>OFC = เลข approve/เลขอนุมัติ</br>มีใช้ในแฟ้มที่ 1</br>มีใช้ในแฟ้ม(แบบชื่อ) INS",
+                        "example": "PP1007991295</br>22692915"
+                    },
+                    "PERSON_ID": {
+                        "type": "string",
+                        "description": "Text (13 BYTE) รหัสประจำตัวประชาชนตามสำนักทะเบียนราษฎร์ รหัสบัตรประจำตัวประชาชนตามกรมการปกครอง</br>มีใช้ในแฟ้มที่ 2, 5, 12, 16</br>มีใช้ในแฟ้ม(แบบชื่อ) PAT, ODX, CHA, DRU",
+                        "example": "1111111111111"
+                    },
+                    "PR": {
+                        "type": "string",
+                        "description": "NUMBER (3 BYTE) อัตราการเต้นหัวใจ OPBKK</br>มีใช้ในแฟ้มที่ 3</br>มีใช้ในแฟ้ม(แบบชื่อ) OPD",
+                        "example": "88"
+                    },
+                    "PROVIDER": {
+                        "type": "string",
+                        "description": "Text (15 BYTE) ผู้ให้บริการที่เกี่ยวข้อง ตามเลขที่ใบประกอบวิชาชีพเวชกรรม *PROVIDER รหัสผู้ให้บริการ  กรณีที่ไม่มีข้อมูลให้ละเป็นค่าว่างได้ OPBKK กรณีที่ไม่มีข้อมูล ให้เป็นค่าว่างได้</br>มีใช้ในแฟ้มที่ 14, 16</br>มีใช้ในแฟ้ม(แบบชื่อ) ADP, DRU",
+                        "example": " "
+                    },
+                    "QTY": {
+                        "type": "string",
+                        "description": "Number (4 BYTE) หน่วยนับ เป็นจำนวนครั้งหรือจำนวนเม็ด ของอุปกรณ์บำบัดรักษา และจำนวนยาที่ใช้  </br>มีใช้ในแฟ้มที่ 14</br>มีใช้ในแฟ้ม(แบบชื่อ) ADP",
+                        "example": "3"
+                    },
+                    "RATE": {
+                        "type": "string",
+                        "description": "Number (12,2 BYTE) ราคาต่อหน่วย  </br>มีใช้ในแฟ้มที่ 14</br>มีใช้ในแฟ้ม(แบบชื่อ) ADP",
+                        "example": "250"
+                    },
+                    "RR": {
+                        "type": "string",
+                        "description": "NUMBER (3 BYTE) อัตราการหายใจ OPBKK</br>มีใช้ในแฟ้มที่ 3</br>มีใช้ในแฟ้ม(แบบชื่อ) OPD",
+                        "example": "22"
+                    },
+                    "SBP": {
+                        "type": "string",
+                        "description": "NUMBER (3 BYTE) ความดันโลหิตค่าตัวบน OPBKK</br>มีใช้ในแฟ้มที่ 3</br>มีใช้ในแฟ้ม(แบบชื่อ) OPD",
+                        "example": "118"
+                    },
+                    "SEQ": {
+                        "type": "string",
+                        "description": "Text (15 BYTE) รหัสการบริการที่กำหนดโดยโปรแกรม  รหัสการบริการที่กำหนดโดยโปรแกรม เรียงลำดับไม่ซ้ำกัน จะต้องมีทุกแฟ้มที่เกี่ยวข้องกับแฟ้มข้อมูลผู้ป่วยนอก ใช้เชื่อมโยงกับแฟ้ม OPD</br>มีใช้ในแฟ้มที่ 1, 3, 5, 12, 14, 16</br>มีใช้ในแฟ้ม(แบบชื่อ) INS, OPD, ODX, CHA, ADP, DRU",
+                        "example": "640921034436"
+                    },
+                    "SEX": {
+                        "type": "string",
+                        "description": "Text (1 BYTE) รหัสเพศ</br>1 = เพศชาย</br>2 = เพศหญิง  </br>มีใช้ในแฟ้มที่ 2</br>มีใช้ในแฟ้ม(แบบชื่อ) PAT",
+                        "example": "2"
+                    },
+                    "STATUS1": {
+                        "type": "string",
+                        "description": "Text (1 BYTE) ผลการตรวจ LAB COVID</br>1 = Positive</br>0 = Negative  </br>มีใช้ในแฟ้มที่ 14</br>มีใช้ในแฟ้ม(แบบชื่อ) ADP",
+                        "example": "1"
+                    },
+                    "TIMEOPD": {
+                        "type": "string",
+                        "description": "Text (4 BYTE) เวลาที่บันทึก เป็น ชั่วโมง นาที  </br>มีใช้ในแฟ้มที่ 3</br>มีใช้ในแฟ้ม(แบบชื่อ) OPD",
+                        "example": "1306"
+                    },
+                    "TITLE": {
+                        "type": "string",
+                        "description": "Text (30 BYTE) คำนำหน้า  </br>มีใช้ในแฟ้มที่ 2</br>มีใช้ในแฟ้ม(แบบชื่อ) PAT",
+                        "example": "นาง"
+                    },
+                    "TMLTCODE": {
+                        "type": "string",
+                        "description": "Text (15 BYTE) รหัสการตรวจ ตามบัญชีรายการ TMLT ที่ประกาศโดย สมสท. OFC</br>มีใช้ในแฟ้มที่ 14</br>มีใช้ในแฟ้ม(แบบชื่อ) ADP",
+                        "example": "350501"
+                    },
+                    "TYPE": {
+                        "type": "string",
+                        "description": "Text (2 BYTE) 1 = HC (OPD) </br>2 = Instrument (หมวด 2)</br>3 = ค่าบริการอื่นๆ ที่ยังไม่ได้จัดหมวด </br>4 = ค่าส่งเสริมป้องกัน/บริการเฉพาะ</br>5 = Project code</br>6 = การรักษามะเร็งตามโปรโตคอล</br>7 = การรักษาโรคมะเร็งด้วยรังสีวิทยา</br>8 = OP REFER และ รายการ Fee Schedule (สามารถใช้ชื่อ TYPE หรือ TYPEADP ได้)</br>9 = ตรวจวินิจฉัยด้วยวิธีพิเศษอื่นๆ (หมวด 9)</br>10 = ค่าห้อง/ค่าอาหาร (หมวด 1)</br>11 = เวชภัณฑ์ที่ไม่ใช่ยา (หมวด 5)</br>12 = ค่าบริการทันตกรรม (หมวด 13)</br>13 = ค่าบริการฝังเข็ม (หมวด 15)</br>14 = บริการโลหิตและส่วนประกอบของโลหิต (หมวด 6)</br>15 = ตรวจวินิจฉัยทางเทคนิคการแพทย์และพยาธิวิทยา (หมวด 7)</br>16 = ค่าตรวจวินิจฉัยและรักษาทางรังสีวิทยา (หมวด 8)</br>17= ค่าบริการทางการพยาบาล (หมวด 12)</br>18 = อุปกรณ์และเครื่องมือทางการแพทย์ (หมวด 10)</br>19 = ทำหัตถการและวิสัญญี (หมวด 11)</br>20 = ค่าบริการทางกายภาพบำบัดและเวชกรรมฟื้นฟู (หมวด 14) รายละเอียดตามภาคผนวก</br>มีใช้ในแฟ้มที่ 14</br>มีใช้ในแฟ้ม(แบบชื่อ) ADP",
+                        "example": "15"
+                    },
+                    "UUC": {
+                        "type": "string",
+                        "description": "Text (1 BYTE) การใช้สิทธิ</br>1 = ใช้สิทธิ </br>2 = ไม่ใช้สิทธิ ไม่ขอเบิก  </br>มีใช้ในแฟ้มที่ 3</br>มีใช้ในแฟ้ม(แบบชื่อ) OPD",
+                        "example": "1"
+                    },
+                    "DRU_LIST": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/dru"
+                        }
+                    }
+                },
+                "required": [
+                    "type",
+                    "hospitalId",
+                    "personId"
+                ]
+            },
+            "dru": {
+                "type": "object",
+                "description": "ข้อมูลยา",
+                "properties": {
+                    "DATE_SERV": {
+                        "type": "string",
+                        "description": "Date วันที่ที่รับบริการ บันทึก ปีในค่าเป็น ค.ศ. กำหนดรูปแบบเป็น “ปีเดือนวัน” (YYYYMMDD) โดยปีเป็น ค.ศ.</br>มีใช้ในแฟ้มที่ 16</br>มีใช้ในแฟ้ม(แบบชื่อ) DRU",
+                        "example": "20210809"
+                    },
+                    "DID": {
+                        "type": "string",
+                        "description": "Text (30 BYTE) รหัสยาที่หน่วยบริการใช้ (WorkingCode)  Working Code</br>Hospital Drug Code</br>มีใช้ในแฟ้มที่ 16</br>มีใช้ในแฟ้ม(แบบชื่อ) DRU",
+                        "example": "1460048"
+                    },
+                    "DIDNAME": {
+                        "type": "string",
+                        "description": "Text (255 BYTE) ชื่อยาที่ใช้อยู่ปัจจุบันสัมพันธ์กับ DID  </br>มีใช้ในแฟ้มที่ 16</br>มีใช้ในแฟ้ม(แบบชื่อ) DRU",
+                        "example": "siMETHICONE(C) 80 mg"
+                    },
+                    "DIDSTD": {
+                        "type": "string",
+                        "description": "Text (24 BYTE) รหัสยาที่กำหนดเป็น 24 หลัก หากไม่ทราบรหัสผู้ผลิตให้ใส่ 0 ต่อท้าย 5 หลัก ให้ครบ 24 หลัก ใช้กรณีแพทย์แผนไทย</br>มีใช้ในแฟ้มที่ 16</br>มีใช้ในแฟ้ม(แบบชื่อ) DRU",
+                        "example": "101254000053991120381775"
+                    },
+                    "DRUGPRICE": {
+                        "type": "string",
+                        "description": "Text (14 BYTE) ราคาขายต่อหน่วย  </br>มีใช้ในแฟ้มที่ 16</br>มีใช้ในแฟ้ม(แบบชื่อ) DRU",
+                        "example": "1"
+                    },
+                    "DRUGREMARK": {
+                        "type": "string",
+                        "description": "Text (2 BYTE) กรณีที่รายการยาเป็นยานอกบัญชียาหลัก จะต้องระบุ รหัสเหตุผลการใช้ยา</br>EA : เกิดอาการไม่พึงประสงค์จากยาหรือแพ้ยาที่สามารถใช้ได้ในบัญชียาหลักแห่งชาติ</br>EB : ผลการรักษาไม่บรรลุเป้าหมายแม้ว่าได้ใช้ยาในบัญชียาหลักแห่งชาติครบตามมาตรฐานการรักษาแล้ว</br>EC : ไม่มีกลุ่มยาในบัญชียาหลักแห่งชาติให้ใช้ แต่ผู้ป่วยมีความจำเป็นในการใช้ยานี้ ตามข้อบ่งชี้ที่ได้ขึ้นทะเบียนไว้กับสำนักงานคณะกรรมการอาหารและยา</br>ED : ผู้ป่วยมีภาวะหรือโรคที่ห้ามใช้ยาในบัญชีอย่างสมบูรณ์ หรือมีข้อห้ามการใช้ยาในบัญชีร่วมกับยาอื่น ที่ผู้ป่วยจำเป็นต้องใช้อย่างหลักเลี่ยงไม่ได้</br>EE : ยาในบัญชียาหลักแห่งชาติมีราคาแพงกว่า (ในเชิงความคุ้มค่า)</br>EF : ผู้ป่วยแสดงความจำนงต้องการ (เบิกไม่ได้)</br>PA : ยากลุ่มที่ต้องขออนุมัติก่อนการใช้ (PA) เช่น ยามะเร็ง 6 ชนิด ยารักษากลุ่มโรครูมาติกและโรคสะเก็ดเงิน 2 ชนิด กรณีที่ไม่มีข้อมูล ให้เป็นค่าว่างได้</br>มีใช้ในแฟ้มที่ 16</br>มีใช้ในแฟ้ม(แบบชื่อ) DRU",
+                        "example": "EC"
+                    },
+                    "PA_NO": {
+                        "type": "string",
+                        "description": "Text (9 BYTE) เลขที่ได้รับการอนุมัติ จากระบบขออนุมัติใช้ยาควบคุมเฉพาะ กรณีที่ไม่มีข้อมูล ให้เป็นค่าว่างได้</br>มีใช้ในแฟ้มที่ 16</br>มีใช้ในแฟ้ม(แบบชื่อ) DRU",
+                        "example": "zLi8bWk67"
+                    },
+                    "UNIT": {
+                        "type": "string",
+                        "description": "Text (20 BYTE) หน่วยนับของยาที่ใช้ในการจ่ายยา เช่น เม็ด ขวด  </br>มีใช้ในแฟ้มที่ 16</br>มีใช้ในแฟ้ม(แบบชื่อ) DRU",
+                        "example": "เม็ด"
+                    },
+                    "UNIT_PACK": {
+                        "type": "string",
+                        "description": "Text (20 BYTE) ขนาดบรรจุต่อหน่วยนับที่แสดงใน Field UNIT ใช้สำหรับยาที่มีการแบ่งบรรจุเพื่อการจ่ายยาที่เหมาะสม เช่น ยาน้ำ หรือ ยากลุ่มที่มีทะเบียนยาเดียวกันแต่มีขนาดบรรจุต่างกันของบางบริษัท  กรณีที่ไม่มีข้อมูล ให้เป็นค่าว่างได้</br>มีใช้ในแฟ้มที่ 16</br>มีใช้ในแฟ้ม(แบบชื่อ) DRU",
+                        "example": "1xเม็ด"
+                    },
+                    "USE_STATUS": {
+                        "type": "string",
+                        "description": "Text (1 BYTE) หมวดรายการยา</br>1 = ใช้ในโรงพยาบาล</br>2 = ใช้ที่บ้าน</br>3 = ยาเกิน 2 สัปดาห์ (กลับบ้าน)</br>4 = ยาโรคเรื้อรัง (กลับบ้าน)  </br>มีใช้ในแฟ้มที่ 16</br>มีใช้ในแฟ้ม(แบบชื่อ) DRU",
+                        "example": "1"
+                    }
+                }
+            },
+            "homewardPost": {
+                "type": "object",
+                "description": "ข้อมูล Input สำหรับสร้างการส่งข้อมูลการเบิกจ่าย eClaim",
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "description": "รูปแบบ type ของ object ใส่ homewardPost",
+                        "example": "homewardPost"
+                    },
+                    "authen": {
+                        "$ref": "#/components/schemas/authNHSO"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/homewardEclaim"
+                    }
+                },
+                "required": [
+                    "type",
+                    "authen",
+                    "data"
+                ]
+            },
+            "authNHSO": {
+                "type": "object",
+                "description": "ชุดข้อมูลสำหรับขอ authen token จาก สปสช.",
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "description": "รูปแบบ type ของ object ใส่ authNHSO",
+                        "example": "authNHSO"
+                    },
+                    "username": {
+                        "type": "string",
+                        "description": "ข้อมูล username",
+                        "example": "nstda_ssaa15"
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "ข้อมูล password",
+                        "example": "GcAfvth09dY8vmmUXM6ohlJ5leTxWvrfOn8Ly73f"
+                    }
+                },
+                "required": [
+                    "type",
+                    "username",
+                    "password"
+                ]
+            },
+            "homewardReturn": {
+                "type": "object",
+                "description": "ข้อมูลส่งกลับจากระบบ",
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "description": "รูปแบบ type ของ object ใส่ homewardReturn",
+                        "example": "homewardReturn"
+                    },
+                    "hospitalId": {
+                        "type": "string",
+                        "description": "รหัส id รพ. ในระบบ ไว้ใช้สำหรับเรียกคืนดูข้อมูลราย รพ. แนะนำให้ใช้ id เดียวกับระบบ",
+                        "example": "507f1f77bcf86cd799439542"
+                    },
+                    "personId": {
+                        "type": "string",
+                        "description": "รหัส id คน ในระบบ ไว้ใช้สำหรับเรียกคืนดูข้อมูลรายคน แนะนำให้ใช้ id เดียวกับระบบ",
+                        "example": "507f1f77bcf86cd799439237"
+                    },
+                    "transactionId": {
+                        "type": "string",
+                        "description": "ข้อมูลไว้ใช้อ้างอิงในระบบส่งออก eClaim",
+                        "example": "507f1f77bcf86cd799439011"
+                    },
+                    "state": {
+                        "$ref": "#/components/schemas/stateObject"
+                    },
+                    "taskProcess": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "รายการแฟ้มที่ระบบสามารถประมวลผลได้",
+                        "example": [
+                            "INS",
+                            "PAT",
+                            "OPD",
+                            "ODX",
+                            "CHA",
+                            "ADP",
+                            "DRU"
+                        ]
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/homewardEclaim"
+                    }
+                }
+            },
+            "stateObject": {
+                "type": "object",
+                "description": "เก็บสถานะของข้อมูล",
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "description": "รูปแบบ type ของ object ใส่ stateObject",
+                        "example": "stateObject"
+                    },
+                    "status": {
+                        "type": "string",
+                        "description": "สถานะการส่งเคลม</br>queuing=เข้าคิวรอประมวลผล</br>waiting=จัดข้อมูลเตรียมข้อมูลพร้อมเข้าสู่การประมวลผล</br>process=เข้าสู่การประมวลผลส่ง eclaim</br>done=เสร็จสิ้นการประมวลผล</br>error=พบปัญหา",
+                        "enum": [
+                            "queuing",
+                            "waiting",
+                            "process",
+                            "done",
+                            "error"
+                        ]
+                    },
+                    "message": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "ข้อความจากระบบ",
+                        "example": [
+                            "เข้าคิวรอการประมวลผล",
+                            "ค้นหาแฟ้มที่สามารถประมวลผลได้"
+                        ]
+                    },
+                    "errorMessage": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "ข้อความ error จากระบบ",
+                        "example": [
+                            "ไม่มี HCODE",
+                            "ไม่มี HN"
+                        ]
+                    }
+                }
+            },
+            "homewardReturnS": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/homewardReturn"
+                }
+            }
+        }
+    },
+    "paths": {
+        "/eclaim": {
+            "post": {
+                "description": "สร้างรายการข้อมูลการเบิกจ่าย โดยให้ใส่ field ที่มีในระบบ แล้วตัว api จะทำการค้นหาให้เองว่าสามารถประมวลผลส่งออกไฟล์ใดได้บ้าง",
+                "summary": "สร้างรายการข้อมูลการเบิกจ่าย",
+                "tags": [
+                    "eClaim"
+                ],
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/homewardPost"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "100": {
+                        "description": "Continue",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/homewardReturn"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/eclaim/transaction/{transactionId}": {
+            "get": {
+                "description": "ดึงข้อมูลสถานะ transection",
+                "tags": [
+                    "eClaim"
+                ],
+                "summary": "ดึงสถานะ transection",
+                "parameters": [
+                    {
+                        "name": "transactionId",
+                        "in": "path",
+                        "description": "transactionId ที่ได้ตอนสร้างข้อมูล",
+                        "example": "507f1f77bcf86cd799439011",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/homewardReturn"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/eclaim/person/{personId}": {
+            "get": {
+                "description": "อนาคต รายการเบิกจ่ายรายคน",
+                "tags": [
+                    "พัฒนาในอนาคต"
+                ],
+                "parameters": [
+                    {
+                        "name": "personId",
+                        "in": "path",
+                        "description": "รหัส id ของคน",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "รายการของหน้าข้อมูล",
+                        "example": 2,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/homewardReturnS"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/eclaim/hospital/{hospitalId}": {
+            "get": {
+                "description": "อนาคต รายการเบิกจ่ายราย รพ.",
+                "tags": [
+                    "พัฒนาในอนาคต"
+                ],
+                "parameters": [
+                    {
+                        "name": "hospitalId",
+                        "in": "path",
+                        "description": "รหัส id ของ รพ.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "รายการของหน้าข้อมูล",
+                        "example": 2,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/homewardReturnS"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
