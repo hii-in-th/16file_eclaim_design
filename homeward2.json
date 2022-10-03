@@ -285,6 +285,11 @@
                 "type": "object",
                 "description": "ข้อมูลยา",
                 "properties": {
+                    "type": {
+                        "type": "string",
+                        "description": "รูปแบบ type ของ object ใส่ dru",
+                        "example": "dru"
+                    },
                     "DATE_SERV": {
                         "type": "string",
                         "description": "Date วันที่ที่รับบริการ บันทึก ปีในค่าเป็น ค.ศ. กำหนดรูปแบบเป็น “ปีเดือนวัน” (YYYYMMDD) โดยปีเป็น ค.ศ.</br>มีใช้ในแฟ้มที่ 16</br>มีใช้ในแฟ้ม(แบบชื่อ) DRU",
