@@ -497,7 +497,7 @@
         }
     },
     "paths": {
-        "/eclaim": {
+        "/eclaim/commonillness": {
             "post": {
                 "description": "สร้างรายการข้อมูลการเบิกจ่าย โดยให้ใส่ field ที่มีในระบบ แล้วตัว api จะทำการค้นหาให้เองว่าสามารถประมวลผลส่งออกไฟล์ใดได้บ้าง",
                 "summary": "สร้างรายการข้อมูลการเบิกจ่าย",
@@ -533,7 +533,7 @@
                 }
             }
         },
-        "/eclaim/transaction/{transactionId}": {
+        "/eclaim/commonillness/transaction/{transactionId}": {
             "get": {
                 "description": "ดึงข้อมูลสถานะ transection",
                 "tags": [
@@ -566,7 +566,7 @@
                 }
             }
         },
-        "/eclaim/person/{personId}": {
+        "/eclaim/commonillness/person/{personId}": {
             "get": {
                 "description": "อนาคต รายการเบิกจ่ายรายคน",
                 "tags": [
@@ -607,7 +607,7 @@
                 }
             }
         },
-        "/eclaim/hospital/{hospitalId}": {
+        "/eclaim/commonillness/hospital/{hospitalId}": {
             "get": {
                 "description": "อนาคต รายการเบิกจ่ายราย รพ.",
                 "tags": [
