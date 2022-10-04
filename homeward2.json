@@ -43,6 +43,11 @@
                         "description": "รหัส id คน ในระบบ ไว้ใช้สำหรับเรียกคืนดูข้อมูลรายคน แนะนำให้ใช้ id เดียวกับระบบ",
                         "example": "507f1f77bcf86cd799439237"
                     },
+                    "refId": {
+                        "type": "string",
+                        "description": "รหัส id สำหรับอ้างอิงจากระบบหลัก",
+                        "example": "507f1f77bcf86cd799439452"
+                    },
                     "AMOUNT": {
                         "type": "string",
                         "description": "Number (12,2 BYTE) จำนวนเงิน ค่ารักษาของบริการรายการนั้น เป็นบาท    </br>มีใช้ในแฟ้มที่ 12, 16</br>มีใช้ในแฟ้ม(แบบชื่อ) CHA, DRU",
@@ -278,7 +283,8 @@
                 "required": [
                     "type",
                     "hospitalId",
-                    "personId"
+                    "personId",
+                    "refId"
                 ]
             },
             "dru": {
