@@ -36,15 +36,21 @@ stateDiagram
       PostgreSQL
     }
 
-    Queue --> Process16files
-    state Process16files {
+    Queue --> HomewardProcessFiles
+    state HomewardProcessFiles {
       direction LR
       ETL
       สร้างไฟล์ตามรูปแบบ
       transectionId_filetype
     }
-    Process16files --> send_eClaim
-    send_eClaim --> report
+
+    state send_eClaim {
+        direction LR
+        isShareProcess
+        CallbackReport
+    }
+
+    HomewardProcessFiles --> send_eClaim
     
 ```
 # ER
@@ -66,6 +72,8 @@ erDiagram
         string message
         string errorMessage
         string taskProcess "แต่ละข้อความคั่นด้วย ,"
+        string call_back_type "ตอนนี้ใช้เป็น homeward"
+        string call_back_url "https://xxx.hii.in.th/yyy/zzz"
     }
 
 
