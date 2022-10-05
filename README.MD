@@ -64,6 +64,8 @@ erDiagram
         string hospital_id
         string person_id
         string ref_id
+        string call_back_type "ตอนนี้ใช้เป็น homeward"
+        string call_back_url "https://xxx.hii.in.th/yyy/zzz"
         json data
     }
     state {
@@ -72,8 +74,6 @@ erDiagram
         string message
         string errorMessage
         string taskProcess "แต่ละข้อความคั่นด้วย ,"
-        string call_back_type "ตอนนี้ใช้เป็น homeward"
-        string call_back_url "https://xxx.hii.in.th/yyy/zzz"
     }
 
 
