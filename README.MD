@@ -109,7 +109,7 @@ flowchart LR
 
 ```
 
-## ETL Flow
+# ETL Flow
 
 ```mermaid
 flowchart LR
@@ -139,4 +139,45 @@ flowchart LR
     end
 
     Queue -->|Streaming| input
+```
+
+# Main function send_eClaim Flow
+```mermaid
+    flowchart TB
+    send_eClaim("ส่งเคลม(transactionId,username,password)")
+    send_eClaim-->getFile[["ดึงรายการไฟล์ของ (transectionId)"]]
+    getFile-->createBody[["สร้าง Body สำหรับส่งเคลม 16 แฟ้ม(List files)"]]
+    createBody-->sendToNHSO[["ส่งข้อมูลเคลมไปยัง สปสช. (json body,username,password)"]]
+    sendToNHSO-->updateStats[["รายงานบันทึกผลเคลม (transectionId, status)"]]
+    updateStats-->moveArchive[["ย้ายไฟล์ไปยัง archive (transectionId)"]]
+    moveArchive-->END(END)
+```
+## Sub function สร้าง Body สำหรับส่งเคลม 16 แฟ้ม  
+
+```mermaid
+    flowchart TB
+    createBody("สร้าง Body สำหรับส่งเคลม 16 แฟ้ม (List files)")
+    createBody-->fileSize[["ดูขนาดไฟล์ (List files)"]]
+    fileSize-->base64[["ทำข้อมูลไฟล์ให้เป็น base64 (List files)"]]
+    base64-->createJson[["สร้าง body json สำหรับส่งเคลม (List filesize,List base64)"]]
+    createJson-->Return("Return (body json)")
+```
+## Sub function ส่งข้อมูลเคลมไปยัง สปสช.
+```mermaid
+    flowchart TB
+    sendToNHSO("ส่งข้อมูลเคลมไปยัง สปสช. (json body,username,password)")
+    sendToNHSO-->getToken[["authen เพื่อขอ token สำหรับส่งข้อมูล (username,password)"]]
+    getToken-->send[["ส่งข้อมูลไปยัง eClaim สปสช.(json body,token)"]]
+    send-->checkError{"ServerError หรือไม่"}
+    checkError-->|"มี ให้ลอง 3 ครั้ง\nถ้าครบ ให้ throw LimitServerRetry"| send
+    checkError-->|"ไม่มี Error"| Return("Return (ผลการส่ง)")
+```
+## Sub function รายงานบันทึกผลเคลม
+```mermaid
+    flowchart TB
+    updateStats("รายงานบันทึกผลเคลม (transectionId, status)")
+    updateStats-->|"อัพเดดข้อมูล\nstatus,message"| database[(Database\npgsql)]
+    updateStats-->mainSystem[["รายงานผล\nไปยังระบบหลัก"]]
+    database-->Return
+    mainSystem-->Return
 ```
