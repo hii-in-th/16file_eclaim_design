@@ -58,7 +58,7 @@ stateDiagram
 ```mermaid
 erDiagram
     homeward-eClaim ||--|{ common_wellnet_eclaim : "is"
-    state ||--|{ homeward-eClaim : "have"
+    state ||--|| homeward-eClaim : "have"
     common_wellnet_eclaim {
         string transaction_id PK "ใช้ link กับข้อมูล"
         string hospital_id
