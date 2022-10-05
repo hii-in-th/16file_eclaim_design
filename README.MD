@@ -47,7 +47,29 @@ stateDiagram
     send_eClaim --> report
     
 ```
+# ER
 
+```mermaid
+erDiagram
+    homeward-eClaim ||--|{ common_wellnet_eclaim : "is"
+    state ||--|{ homeward-eClaim : "have"
+    common_wellnet_eclaim {
+        string transaction_id PK "ใช้ link กับข้อมูล"
+        string hospital_id
+        string person_id
+        string ref_id
+        json data
+    }
+    state {
+        string transaction_id FK "ใช้ link กับข้อมูล"
+        string status
+        string message
+        string errorMessage
+        string taskProcess "แต่ละข้อความคั่นด้วย ,"
+    }
+
+
+```
 # Flowchart
 
 ## api
