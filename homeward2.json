@@ -284,7 +284,8 @@
                     "type",
                     "hospitalId",
                     "personId",
-                    "refId"
+                    "refId",
+                    "INSCL"
                 ]
             },
             "dru": {
