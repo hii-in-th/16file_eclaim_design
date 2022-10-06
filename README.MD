@@ -1,18 +1,18 @@
 # design
 
 โครงสร้างชื่อไฟล์  
-`{transectionId}_{filetype}`
+`{transectionId}_{filetype}_{สิทธิการรรักษา}_{ขนาดbyte}`
 - transectionId รหัสที่ระบบสร้างขึ้นมา
 - filetype รูปแบบของไฟล์ 16 แฟ้ม INS, PAT, IPD, อื่นๆ  
 
 example
 ```
-sdfasd54sd654825_INS.txt
-sdfasd54sd654825_ADP.txt
-sdfasd54sd654825_CHA.txt
-asasd54sd654826_INS.txt
-asfasd54sd654826_ADP.txt
-asfasd54sd654826_CHA.txt
+sdfasd54sd654825_INS_UCS.txt
+sdfasd54sd654825_ADP_UCS.txt
+sdfasd54sd654825_CHA_UCS.txt
+asasd54sd654826_INS_SSS.txt
+asfasd54sd654826_ADP_SSS.txt
+asfasd54sd654826_CHA_SSS.txt
 ```
 
 ```mermaid
@@ -114,33 +114,25 @@ flowchart LR
 ```mermaid
 flowchart LR
     subgraph Queue
-        direction TB
         pgsql
         RabbitMQ
     end
     subgraph ETL
         input
-        file1f[1.INS filter]
-        file2f[2.PAT filter]
-        fileNf[N.XXX filter]
-        
-        create1f["สร้าง 1.INS"]
-        create2f["สร้าง 2.PAT"]
-        createNf["สร้าง N.XXX"]
+        create1f[["สร้าง\n1.INS"]]
+        create2f[["สร้าง\n2.PAT"]]
+        createNf[["สร้าง\nN.XXX"]]
 
+        input --> create1f
+        create1f --> create2f
+        create2f --> createNf
+        createNf --> callSend[["เรียกใช้งาน\nsend_eClaim"]]
 
-        input --> file1f
-        input --> file2f
-        input --> fileNf
-
-        file1f --> create1f
-        file2f --> create2f
-        fileNf --> createNf
     end
 
     Queue -->|Streaming| input
 ```
-
+ตอนสร้างไฟล์ อย่าลืมเช็คสิทธิเก็บไว้ด้วย เพราะการส่งข้อมูลแต่ละชุด ต้องมีการแยกตามสิทธิ์ `UCS, OFC, LGO, SSS`
 # Main function send_eClaim Flow
 ```mermaid
     flowchart TB
