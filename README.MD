@@ -80,6 +80,8 @@ erDiagram
 Note:  
 https://x-team.com/blog/automatic-timestamps-with-postgresql/  
 https://stackoverflow.com/questions/68066248/how-to-get-the-inserted-row-in-kotlin-exposed  
+https://docs.confluent.io/kafka-clients/java/current/overview.html#java-example-code  
+
 
 # Flowchart
 ## api  
