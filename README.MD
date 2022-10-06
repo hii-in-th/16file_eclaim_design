@@ -60,27 +60,29 @@ erDiagram
     homeward-eClaim ||--|{ common_wellnet_eclaim : "is"
     state ||--|| homeward-eClaim : "have"
     common_wellnet_eclaim {
-        string transaction_id PK "ใช้ link กับข้อมูล"
+        serial transaction_id PK "ใช้ link กับข้อมูล"
         string hospital_id
         string person_id
         string ref_id
         string call_back_type "ตอนนี้ใช้เป็น homeward"
         string call_back_url "https://xxx.hii.in.th/yyy/zzz"
+        timestamptz  create_time "ปกติถ้าไม่ใส่จะ default NOW"
         json data
     }
     state {
-        string transaction_id FK "ใช้ link กับข้อมูล"
+        integer transaction_id FK "ใช้ link กับข้อมูล"
         string status
         string message
         string errorMessage
         string taskProcess "แต่ละข้อความคั่นด้วย ,"
     }
+```  
+Note:  
+https://x-team.com/blog/automatic-timestamps-with-postgresql/  
+https://stackoverflow.com/questions/68066248/how-to-get-the-inserted-row-in-kotlin-exposed  
 
-
-```
 # Flowchart
-
-## api
+## api  
 ```mermaid
 flowchart LR
     
@@ -154,6 +156,9 @@ flowchart LR
     base64-->createJson[["สร้าง body json สำหรับส่งเคลม (List filesize,List base64)"]]
     createJson-->Return("Return (body json)")
 ```
+Note:
+file to base64 https://www.adamsmith.haus/python/examples/1892/base64-encode-a-file-in-%60base64%60  
+get file size https://www.geeksforgeeks.org/how-to-get-file-size-in-python/  
 ## Sub function ส่งข้อมูลเคลมไปยัง สปสช.
 ```mermaid
     flowchart TB
@@ -173,3 +178,6 @@ flowchart LR
     database-->Return
     mainSystem-->Return
 ```
+Note:  
+python pgsql https://www.postgresqltutorial.com/postgresql-python/  
+
