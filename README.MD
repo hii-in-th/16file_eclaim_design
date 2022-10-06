@@ -1,7 +1,7 @@
 # design
 
 โครงสร้างชื่อไฟล์  
-`{transectionId}_{filetype}_{สิทธิการรรักษา}_{ขนาดbyte}`
+`{transectionId}_{filetype}_{สิทธิการรรักษา}`
 - transectionId รหัสที่ระบบสร้างขึ้นมา
 - filetype รูปแบบของไฟล์ 16 แฟ้ม INS, PAT, IPD, อื่นๆ  
 
