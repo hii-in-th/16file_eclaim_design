@@ -1,0 +1,37 @@
+version: "2"
+
+services:
+  zookeeper:
+    # https://hub.docker.com/r/bitnami/zookeeper
+    image: docker.io/bitnami/zookeeper:3.8
+    ports:
+      - "23451:23451"
+    volumes:
+      - "./zookeeper_data:/bitnami/zookeeper"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=no
+      - ZOO_PORT_NUMBER=23451
+      - ZOO_CLIENT_USER=kafkaxx1992
+      - ZOO_CLIENT_PASSWORD=recommended_random
+      - ZOO_ENABLE_AUTH=yes
+      - ZOO_HEAP_SIZE=1024
+  kafka:
+    # https://hub.docker.com/r/bitnami/kafka
+    image: docker.io/bitnami/kafka:3.3
+    ports:
+      - "9092:9092"
+    volumes:
+      - "./kafka_data:/bitnami/kafka"
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=no
+      - KAFKA_INTER_BROKER_USER=adminmmaa
+      - KAFKA_INTER_BROKER_PASSWORD=recommended_random2
+      - KAFKA_HEAP_OPTS=-Xmx1024m -Xms1024m
+      - KAFKA_ZOOKEEPER_USER=kafkaxx1992
+      - KAFKA_ZOOKEEPER_PASSWORD=recommended_random
+      - KAFKA_CLIENT_USERS=recommended_random
+      - KAFKA_CLIENT_USERS=api123456
+      - KAFKA_CLIENT_PASSWORDS=recommended_random3
+    depends_on:
+      - zookeeper
