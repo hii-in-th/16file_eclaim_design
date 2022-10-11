@@ -7,7 +7,7 @@ services:
     ports:
       - "23451:23451"
     volumes:
-      - "./zookeeper_data:/bitnami/zookeeper"
+      - "./zookeeper_data:/bitnami/zookeeper:ro"
     environment:
       - ALLOW_ANONYMOUS_LOGIN=no
       - ZOO_PORT_NUMBER=23451
@@ -21,9 +21,9 @@ services:
     ports:
       - "9092:9092"
     volumes:
-      - "./kafka_data:/bitnami/kafka"
+      - "./kafka_data:/bitnami/kafka:ro"
     environment:
-      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:23451
       - ALLOW_PLAINTEXT_LISTENER=no
       - KAFKA_INTER_BROKER_USER=adminmmaa
       - KAFKA_INTER_BROKER_PASSWORD=recommended_random2
